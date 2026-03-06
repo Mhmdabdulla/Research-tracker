@@ -1,0 +1,60 @@
+// src/routes/paper.routes.ts
+
+import { Router } from "express";
+import { PaperController } from "../controllers/paper.controller";
+import { PaperService } from "../services/paper.service";
+import { InMemoryPaperRepository } from "../repositories/paper.repository";
+import { validate } from "../middlewares/validate.middleware";
+import {
+  createPaperValidation,
+  updatePaperValidation,
+  listPapersValidation,
+  paperIdValidation,
+} from "../middlewares/validate.middleware";
+
+const router = Router();
+
+// ── Dependency wiring (swap repository here when adding a real DB) ────────────
+const paperRepository = new InMemoryPaperRepository();
+const paperService = new PaperService(paperRepository);
+const paperController = new PaperController(paperService);
+
+/**
+ * GET    /api/papers         - List papers with filters, sort, pagination
+ * POST   /api/papers         - Create a new paper
+ * GET    /api/papers/:id     - Get a single paper
+ * PATCH  /api/papers/:id     - Partially update a paper
+ * DELETE /api/papers/:id     - Delete a paper
+ */
+
+router.get(
+  "/",
+  validate(listPapersValidation),
+  paperController.listPapers,
+);
+
+router.post(
+  "/",
+  validate(createPaperValidation),
+  paperController.createPaper,
+);
+
+router.get(
+  "/:id",
+  validate(paperIdValidation),
+  paperController.getPaperById,
+);
+
+router.patch(
+  "/:id",
+  validate(updatePaperValidation),
+  paperController.updatePaper,
+);
+
+router.delete(
+  "/:id",
+  validate(paperIdValidation),
+  paperController.deletePaper,
+);
+
+export { router as paperRouter, paperRepository };

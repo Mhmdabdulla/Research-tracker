@@ -1,9 +1,9 @@
 // src/routes/analytics.routes.ts
 
 import { Router } from "express";
-import { AnalyticsController } from "../controllers/analytics.controller";
-import { AnalyticsService } from "../services/analytics.service";
-import { paperRepository } from "./paper.routes";
+import { AnalyticsController } from "../controllers/analytics.controller.js";
+import { AnalyticsService } from "../services/analytics.service.js";
+import { paperRepository } from "./paper.routes.js";
 
 const router = Router();
 

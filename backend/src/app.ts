@@ -3,10 +3,10 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-import connectDB from './config/db';
-import { errorHandler, notFoundHandler } from "./middlewares/error.middleware"
-import { paperRouter } from "./routes/paper.routes";
-import { analyticsRouter } from "./routes/analytics.routes";
+import connectDB from './config/db.js';
+import { errorHandler, notFoundHandler } from "./middlewares/error.middleware.js"
+import { paperRouter } from "./routes/paper.routes.js";
+import { analyticsRouter } from "./routes/analytics.routes.js";
 
 // Load environment variables
 dotenv.config();

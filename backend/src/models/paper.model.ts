@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { IPaper } from './interfaces/paper.interface';
+import { IPaper } from './interfaces/paper.interface.js';
 
 const PaperSchema: Schema = new Schema(
   {

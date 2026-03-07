@@ -2,7 +2,7 @@
 
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { ApiResponse, PaginatedResponse } from "../types/api.types";
+import { ApiResponse, PaginatedResponse } from "../types/api.types.js";
 
 export class ResponseHelper {
   static success<T>(

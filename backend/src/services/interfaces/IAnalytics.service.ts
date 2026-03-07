@@ -6,7 +6,7 @@ import {
   DomainStagesResponseDto,
   FunnelResponseDto,
   RecentPapersResponseDto,
-} from "../../dtos/analytics.dto";
+} from "../../dtos/analytics.dto.js";
 
 export interface IAnalyticsService {
   getDashboardSummary(): Promise<DashboardSummaryDto>;

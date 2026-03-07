@@ -7,7 +7,7 @@ import {
   SortableField,
   SortDirection,
   TimePeriod,
-} from "../types/paper.types";
+} from "../types/paper.types.js";
 
 // ─── Request DTOs ─────────────────────────────────────────────────────────────
 

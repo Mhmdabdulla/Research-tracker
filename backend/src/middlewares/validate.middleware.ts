@@ -3,7 +3,7 @@
 import { Request, Response, NextFunction } from "express";
 import { body, param, query, validationResult, ValidationChain } from "express-validator";
 import { StatusCodes } from "http-status-codes";
-import { ImpactScore, PaperStage, ResearchDomain } from "../types/paper.types";
+import { ImpactScore, PaperStage, ResearchDomain } from "../types/paper.types.js";
 
 // ─── Runner ───────────────────────────────────────────────────────────────────
 

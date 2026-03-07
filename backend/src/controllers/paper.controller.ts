@@ -2,20 +2,20 @@
 
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { IPaperController } from "./interfaces/IPaper.controller";
-import { IPaperService } from "../services/interfaces/IPaper.service";
+import { IPaperController } from "./interfaces/IPaper.controller.js";
+import { IPaperService } from "../services/interfaces/IPaper.service.js";
 import {
   CreatePaperDto,
   ListPapersQueryDto,
   UpdatePaperDto,
-} from "../dtos/paper.dto";
-import { ResponseHelper } from "../utils/response.helper";
+} from "../dtos/paper.dto.js";
+import { ResponseHelper } from "../utils/response.helper.js";
 import {
   ImpactScore,
   PaperStage,
   ResearchDomain,
   SortDirection,
-} from "../types/paper.types";
+} from "../types/paper.types.js";
 
 export class PaperController implements IPaperController {
   constructor(private readonly paperService: IPaperService) {}

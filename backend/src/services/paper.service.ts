@@ -1,16 +1,16 @@
 // src/services/paper.service.ts
 
-import { IPaperService } from "./interfaces/IPaper.service";
-import { IPaperRepository } from "../repositories/interfaces/IPaper.repository";
+import { IPaperService } from "./interfaces/IPaper.service.js";
+import { IPaperRepository } from "../repositories/interfaces/IPaper.repository.js";
 import {
   CreatePaperDto,
   ListPapersQueryDto,
   PaperResponseDto,
   UpdatePaperDto,
-} from "../dtos/paper.dto";
-import { PaginatedResponse } from "../types/api.types";
-import { ResearchPaper } from "../types/paper.types";
-import { NotFoundError } from "../utils/errors";
+} from "../dtos/paper.dto.js";
+import { PaginatedResponse } from "../types/api.types.js";
+import { ResearchPaper } from "../types/paper.types.js";
+import { NotFoundError } from "../utils/errors.js";
 
 export class PaperService implements IPaperService {
   constructor(private readonly paperRepository: IPaperRepository) {}

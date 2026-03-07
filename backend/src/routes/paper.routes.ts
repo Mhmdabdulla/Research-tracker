@@ -1,16 +1,16 @@
 // src/routes/paper.routes.ts
 
 import { Router } from "express";
-import { PaperController } from "../controllers/paper.controller";
-import { PaperService } from "../services/paper.service";
-import {  MongoPaperRepository } from "../repositories/paper.repository";
-import { validate } from "../middlewares/validate.middleware";
+import { PaperController } from "../controllers/paper.controller.js";
+import { PaperService } from "../services/paper.service.js";
+import {  MongoPaperRepository } from "../repositories/paper.repository.js";
+import { validate } from "../middlewares/validate.middleware.js";
 import {
   createPaperValidation,
   updatePaperValidation,
   listPapersValidation,
   paperIdValidation,
-} from "../middlewares/validate.middleware";
+} from "../middlewares/validate.middleware.js";
 
 const router = Router();
 

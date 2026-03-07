@@ -1,7 +1,7 @@
 // src/interfaces/paper.repository.interface.ts
 
-import { ResearchPaper } from "../../types/paper.types";
-import { CreatePaperDto, ListPapersQueryDto, UpdatePaperDto } from "../../dtos/paper.dto";
+import { ResearchPaper } from "../../types/paper.types.js";
+import { CreatePaperDto, ListPapersQueryDto, UpdatePaperDto } from "../../dtos/paper.dto.js";
 
 export interface IPaperRepository {
   /**

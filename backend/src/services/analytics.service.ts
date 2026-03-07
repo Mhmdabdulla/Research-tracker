@@ -1,7 +1,7 @@
 // src/services/analytics.service.ts
 
-import { IAnalyticsService } from "./interfaces/IAnalytics.service";
-import { IPaperRepository } from "../repositories/interfaces/IPaper.repository";
+import { IAnalyticsService } from "./interfaces/IAnalytics.service.js";
+import { IPaperRepository } from "../repositories/interfaces/IPaper.repository.js";
 import {
   CitationsImpactDataPointDto,
   CitationsImpactResponseDto,
@@ -13,8 +13,8 @@ import {
   RecentPaperDto,
   RecentPapersResponseDto,
   StageCountDto,
-} from "../dtos/analytics.dto";
-import { PaperStage, ResearchPaper } from "../types/paper.types";
+} from "../dtos/analytics.dto.js";
+import { PaperStage, ResearchPaper } from "../types/paper.types.js";
 
 // Ordered pipeline — used for funnel computation and progress bars
 const STAGE_ORDER: PaperStage[] = [

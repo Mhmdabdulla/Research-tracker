@@ -1,7 +1,7 @@
 // src/services/interfaces/IPaper.service.ts
 
-import { CreatePaperDto, ListPapersQueryDto, PaperResponseDto, UpdatePaperDto } from "../../dtos/paper.dto";
-import { PaginatedResponse } from "../../types/api.types";
+import { CreatePaperDto, ListPapersQueryDto, PaperResponseDto, UpdatePaperDto } from "../../dtos/paper.dto.js";
+import { PaginatedResponse } from "../../types/api.types.js";
 
 export interface IPaperService {
   /**

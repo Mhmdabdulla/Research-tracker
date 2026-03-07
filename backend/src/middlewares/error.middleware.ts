@@ -2,7 +2,7 @@
 
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AppError } from "../utils/errors";
+import { AppError } from "../utils/errors.js";
 
 export function errorHandler(
   err: Error,

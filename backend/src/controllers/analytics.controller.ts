@@ -1,9 +1,9 @@
 // src/controllers/analytics.controller.ts
 
 import { Request, Response, NextFunction } from "express";
-import { IAnalyticsController } from "./interfaces/IAnalytics.controller";
-import { IAnalyticsService } from "../services/interfaces/IAnalytics.service";
-import { ResponseHelper } from "../utils/response.helper";
+import { IAnalyticsController } from "./interfaces/IAnalytics.controller.js";
+import { IAnalyticsService } from "../services/interfaces/IAnalytics.service.js";
+import { ResponseHelper } from "../utils/response.helper.js";
 
 export class AnalyticsController implements IAnalyticsController {
   constructor(private readonly analyticsService: IAnalyticsService) {}

@@ -1,11 +1,11 @@
 // src/repositories/paper.repository.ts
 
 import { FilterQuery, SortOrder, Types } from "mongoose";
-import { IPaperRepository } from "./interfaces/IPaper.repository";
-import { CreatePaperDto, ListPapersQueryDto, UpdatePaperDto } from "../dtos/paper.dto";
-import { ResearchPaper } from "../types/paper.types";
-import { IPaper } from "../models/interfaces/paper.interface";
-import Paper from "../models/paper.model";
+import { IPaperRepository } from "./interfaces/IPaper.repository.js";
+import { CreatePaperDto, ListPapersQueryDto, UpdatePaperDto } from "../dtos/paper.dto.js";
+import { ResearchPaper } from "../types/paper.types.js";
+import { IPaper } from "../models/interfaces/paper.interface.js";
+import Paper from "../models/paper.model.js";
 
 // ─── Mapper: Mongoose document → domain type ─────────────────────────────────
 

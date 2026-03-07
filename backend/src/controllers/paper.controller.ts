@@ -71,7 +71,7 @@ export class PaperController implements IPaperController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const paper = await this.paperService.getPaperById(req.params.id);
+      const paper = await this.paperService.getPaperById(req.params.id as string);
       ResponseHelper.success(res, paper);
     } catch (err) {
       next(err);
@@ -103,7 +103,7 @@ export class PaperController implements IPaperController {
   ): Promise<void> => {
     try {
       const dto: UpdatePaperDto = req.body;
-      const paper = await this.paperService.updatePaper(req.params.id, dto);
+      const paper = await this.paperService.updatePaper(req.params.id as string, dto);
       ResponseHelper.success(res, paper, "Paper updated successfully");
     } catch (err) {
       next(err);
@@ -118,7 +118,7 @@ export class PaperController implements IPaperController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      await this.paperService.deletePaper(req.params.id);
+      await this.paperService.deletePaper(req.params.id as string);
       ResponseHelper.noContent(res);
     } catch (err) {
       next(err);

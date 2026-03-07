@@ -3,7 +3,7 @@
 import { Router } from "express";
 import { PaperController } from "../controllers/paper.controller";
 import { PaperService } from "../services/paper.service";
-import { InMemoryPaperRepository } from "../repositories/paper.repository";
+import {  MongoPaperRepository } from "../repositories/paper.repository";
 import { validate } from "../middlewares/validate.middleware";
 import {
   createPaperValidation,
@@ -14,8 +14,8 @@ import {
 
 const router = Router();
 
-// ── Dependency wiring (swap repository here when adding a real DB) ────────────
-const paperRepository = new InMemoryPaperRepository();
+// ── Dependency wiring  ────────────
+const paperRepository = new MongoPaperRepository();
 const paperService = new PaperService(paperRepository);
 const paperController = new PaperController(paperService);
 

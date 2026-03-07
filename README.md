@@ -65,12 +65,10 @@ npm install
 # Setup .env with VITE_API_BASE_URL
 npm run dev
 
----
-
 ## 🔗 Live Demo
 
 **View the live application here:** [👉 Research Paper Tracker Live](https://research-tracker-zeta.vercel.app)
 
-*Note: The initial load might take a few seconds as the backend wakes up from a cold start on the hosting provider on Render.*
+> **Note:** The initial load might take a few seconds as the backend wakes up from a cold start on Render.
 
 ---

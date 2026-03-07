@@ -26,34 +26,38 @@ const ANALYTICS_TAG = "Analytics" as const;
 // ─── Base query ───────────────────────────────────────────────────────────────
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
+  baseUrl: "http://localhost:5000/api",
   prepareHeaders: (headers) => {
     headers.set("Content-Type", "application/json");
     return headers;
   },
 });
 
-// ─── Helper: convert ListPapersParams → URLSearchParams ──────────────────────
-// RTK Query's fetchBaseQuery doesn't handle array params like domain[]=X&domain[]=Y
-// automatically, so we serialize them manually.
+// ─── Helper: convert ListPapersParams → query string ─────────────────────────
+// Arrays MUST be sent as repeated keys: domain=Chemistry&domain=Biology
+// The backend's express-validator custom() does Array.isArray(val) — Express only
+// sets that to true when it sees repeated keys, NOT a single comma-joined value.
+// fetchBaseQuery's `params` field uses Object.entries which can't express repeated
+// keys, so we build the full URL string ourselves with URLSearchParams.
 
-function serializeParams(params: ListPapersParams): Record<string, string> {
-  const out: Record<string, string> = {};
+function buildQueryString(params: ListPapersParams): string {
+  const qs = new URLSearchParams();
 
-  if (params.page)       out.page       = String(params.page);
-  if (params.limit)      out.limit      = String(params.limit);
-  if (params.q)          out.q          = params.q;
-  if (params.timePeriod) out.timePeriod = params.timePeriod;
-  if (params.sortBy)     out.sortBy     = params.sortBy;
-  if (params.sortDir)    out.sortDir    = params.sortDir;
+  if (params.page)       qs.set("page",       String(params.page));
+  if (params.limit)      qs.set("limit",      String(params.limit));
+  if (params.q)          qs.set("q",          params.q);
+  if (params.timePeriod) qs.set("timePeriod", params.timePeriod);
+  if (params.sortBy)     qs.set("sortBy",     params.sortBy);
+  if (params.sortDir)    qs.set("sortDir",    params.sortDir);
 
-  // Arrays are sent as repeated keys: domain=X&domain=Y
-  // express's query parser (with `extended: true`) reads these as arrays
-  if (params.domain?.length)      out.domain      = params.domain.join(",");
-  if (params.stage?.length)       out.stage       = params.stage.join(",");
-  if (params.impactScore?.length) out.impactScore = params.impactScore.join(",");
+  // Repeated keys → Express parses as string[]
+  // e.g. domain=Chemistry&domain=Biology  →  req.query.domain = ["Chemistry","Biology"]
+  params.domain?.forEach((d) => qs.append("domain", d));
+  params.stage?.forEach((s) => qs.append("stage", s));
+  params.impactScore?.forEach((i) => qs.append("impactScore", i));
 
-  return out;
+  const str = qs.toString();
+  return str ? `?${str}` : "";
 }
 
 // ─── API slice ────────────────────────────────────────────────────────────────
@@ -76,10 +80,7 @@ export const apiSlice = createApi({
      * Provides both a list-level tag AND per-id tags so partial invalidation works.
      */
     getPapers: builder.query<PaginatedResponse<ResearchPaper>, ListPapersParams>({
-      query: (params = {}) => ({
-        url: "/papers",
-        params: serializeParams(params),
-      }),
+      query: (params = {}) => `/papers${buildQueryString(params)}`,
       providesTags: (result) =>
         result
           ? [

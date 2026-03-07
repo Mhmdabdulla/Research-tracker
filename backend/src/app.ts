@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import connectDB from './config/db';
 import { errorHandler, notFoundHandler } from "./middlewares/error.middleware"
 import { paperRouter } from "./routes/paper.routes";
+import { analyticsRouter } from "./routes/analytics.routes";
 
 // Load environment variables
 dotenv.config();
@@ -35,6 +36,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 // 4. API Routes
 app.use('/api/papers', paperRouter);
+ app.use("/api/analytics", analyticsRouter);
 
 // ── 404 & global error handling ───────────────────────────────────────────
 app.use(notFoundHandler);

@@ -26,7 +26,7 @@ const ANALYTICS_TAG = "Analytics" as const;
 // ─── Base query ───────────────────────────────────────────────────────────────
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api",
+  baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
   prepareHeaders: (headers) => {
     headers.set("Content-Type", "application/json");
     return headers;

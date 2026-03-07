@@ -43,7 +43,7 @@ export function Sidebar({ currentView, onViewChange }: SidebarProps) {
                 </div>
                 {(!isCollapsed || isMobile) && (
                     <span className="ml-3 font-semibold text-lg tracking-tight whitespace-nowrap">
-                        ScholarTrack
+                        ResearchTrack
                     </span>
                 )}
             </div>
@@ -98,7 +98,7 @@ export function Sidebar({ currentView, onViewChange }: SidebarProps) {
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-primary-foreground">
                         <BookOpen className="w-5 h-5" />
                     </div>
-                    <span className="font-semibold text-lg">ScholarTrack</span>
+                    <span className="font-semibold text-lg">ResearchTrack</span>
                 </div>
                 <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors" onClick={() => setIsMobileOpen(true)}>
                     <Menu className="w-6 h-6" />

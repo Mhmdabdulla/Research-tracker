@@ -80,7 +80,10 @@ export function Sidebar({ currentView, onViewChange }: SidebarProps) {
                 <button className={cn(
                     "flex items-center w-full p-3 rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground transition-all duration-200 group",
                     isCollapsed && !isMobile ? "justify-center" : ""
-                )}>
+                )} onClick={() => {
+                                onViewChange("profile");
+                                if (isMobile) setIsMobileOpen(false);
+                            }}>
                     <Settings className="w-5 h-5 shrink-0" />
                     {(!isCollapsed || isMobile) && (
                         <span className="ml-3 font-medium whitespace-nowrap">Settings</span>

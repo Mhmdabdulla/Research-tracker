@@ -147,3 +147,33 @@ export interface CitationsImpactDataPoint {
   impactLabel: string;
   domain: string;
 }
+
+// ─── Auth ─────────────────────────────────────────────────────────────────────
+
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
+}
+
+export interface SignupRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface UpdateProfileRequest {
+  name?: string;
+  email?: string;
+}
+
+export interface AuthResponse {
+  user: AuthUser;
+  token: string;
+}

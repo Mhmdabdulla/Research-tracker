@@ -11,6 +11,7 @@ import {
   listPapersValidation,
   paperIdValidation,
 } from "../middlewares/validate.middleware.js";
+import { protect } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -27,6 +28,8 @@ const paperController = new PaperController(paperService);
  * DELETE /api/papers/:id     - Delete a paper
  */
 
+router.use(protect); // applies to every route below
+  
 router.get(
   "/",
   validate(listPapersValidation),

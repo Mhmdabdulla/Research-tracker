@@ -35,5 +35,5 @@ export interface IPaperRepository {
   /**
    * Return every paper (used by analytics layer).
    */
-  findAllRaw(): Promise<ResearchPaper[]>;
+  findAllRaw(userId?: string): Promise<ResearchPaper[]>;
 }

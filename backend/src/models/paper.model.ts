@@ -3,6 +3,12 @@ import { IPaper } from './interfaces/paper.interface.js';
 
 const PaperSchema: Schema = new Schema(
   {
+    user:{
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, "Paper must belong to a user"],
+      index: true
+    },
     title: { 
       type: String, 
       required: [true, 'Paper title is required'], 

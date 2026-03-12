@@ -63,6 +63,9 @@ export class MongoPaperRepository implements IPaperRepository {
     // ── Build filter ──────────────────────────────────────────────────────────
     const filter: FilterQuery<IPaper> = {};
 
+    // Scope ALL queries to the requesting user — papers are private
+    if (query.userId) filter.user = query.userId;
+
     if (q) {
       filter.$or = [
         { title: { $regex: q, $options: "i" } },
@@ -112,6 +115,7 @@ export class MongoPaperRepository implements IPaperRepository {
 
   async create(dto: CreatePaperDto): Promise<ResearchPaper> {
     const doc = await Paper.create({
+      user: dto.userId,  // ObjectId ref — scopes this paper to its creator
       title: dto.title,
       authors: dto.authors,
       domain: dto.domain,
@@ -156,8 +160,9 @@ export class MongoPaperRepository implements IPaperRepository {
 
   // ── findAllRaw (used by analytics layer) ──────────────────────────────────
 
-  async findAllRaw(): Promise<ResearchPaper[]> {
-    const docs = await Paper.find().lean<IPaper[]>();
+  async findAllRaw(userId?: string): Promise<ResearchPaper[]> {
+    const filter: FilterQuery<IPaper> = userId ? { user: userId } : {};
+    const docs = await Paper.find(filter).lean<IPaper[]>();
     return docs.map(toResearchPaper);
   }
 }

@@ -18,6 +18,7 @@ export interface CreatePaperDto {
   stage: PaperStage;
   citations: number;
   impactScore: ImpactScore;
+  userId: string;  // injected by PaperController from req.user.id — never from client body
 }
 
 export interface UpdatePaperDto {
@@ -46,6 +47,9 @@ export interface ListPapersQueryDto {
   // Sort
   sortBy?: SortableField;
   sortDir?: SortDirection;
+  
+  // Ownership — always set by the controller from req.user.id
+  userId?: string;
 }
 
 // ─── Response DTOs ────────────────────────────────────────────────────────────

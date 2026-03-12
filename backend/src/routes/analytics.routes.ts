@@ -4,6 +4,7 @@ import { Router } from "express";
 import { AnalyticsController } from "../controllers/analytics.controller.js";
 import { AnalyticsService } from "../services/analytics.service.js";
 import { paperRepository } from "./paper.routes.js";
+import { protect } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -19,6 +20,8 @@ const analyticsController = new AnalyticsController(analyticsService);
  * GET /api/analytics/recent-papers    - 5 most recently added papers (configurable via ?limit=N)
  */
 
+router.use(protect); // applies to every route below
+    
 router.get("/summary", analyticsController.getSummary);
 router.get("/funnel", analyticsController.getFunnel);
 router.get("/domain-stages", analyticsController.getDomainStages);

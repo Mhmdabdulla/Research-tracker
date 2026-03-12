@@ -16,6 +16,7 @@ import {
   ResearchDomain,
   SortDirection,
 } from "../types/paper.types.js";
+import { UnauthorizedError } from "../utils/errors.js";
 
 export class PaperController implements IPaperController {
   constructor(private readonly paperService: IPaperService) {}
@@ -54,6 +55,7 @@ export class PaperController implements IPaperController {
         domain: toArray(domain) as ResearchDomain[] | undefined,
         stage: toArray(stage) as PaperStage[] | undefined,
         impactScore: toArray(impactScore) as ImpactScore[] | undefined,
+        userId:      req.user.id,   // ← scope to the authenticated user
       };
 
       const result = await this.paperService.listPapers(query);
@@ -86,7 +88,10 @@ export class PaperController implements IPaperController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const dto: CreatePaperDto = req.body;
+
+      if (!req.user) throw new UnauthorizedError();
+ 
+      const dto: CreatePaperDto = { ...req.body, userId: req.user.id };
       const paper = await this.paperService.createPaper(dto);
       ResponseHelper.created(res, paper, "Paper created successfully");
     } catch (err) {

@@ -7,6 +7,7 @@ import connectDB from './config/db.js';
 import { errorHandler, notFoundHandler } from "./middlewares/error.middleware.js"
 import { paperRouter } from "./routes/paper.routes.js";
 import { analyticsRouter } from "./routes/analytics.routes.js";
+import { authRouter } from './routes/auth.routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -35,6 +36,7 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // 4. API Routes
+app.use('/api/auth', authRouter);
 app.use('/api/papers', paperRouter);
  app.use("/api/analytics", analyticsRouter);
 

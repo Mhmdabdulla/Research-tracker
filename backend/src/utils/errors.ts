@@ -38,3 +38,10 @@ export class ConflictError extends AppError {
     super(message, StatusCodes.CONFLICT);
   }
 }
+
+// Used by protect middleware and AuthService.login()
+export class UnauthorizedError extends AppError {
+  constructor(message = "Unauthorized") {
+    super(message, StatusCodes.UNAUTHORIZED);
+  }
+}

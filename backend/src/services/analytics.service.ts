@@ -54,8 +54,8 @@ const DEFAULT_RECENT_LIMIT = 5;
 export class AnalyticsService implements IAnalyticsService {
   constructor(private readonly paperRepository: IPaperRepository) {}
 
-  async getDashboardSummary(): Promise<DashboardSummaryDto> {
-    const papers = await this.paperRepository.findAllRaw();
+  async getDashboardSummary(userId: string): Promise<DashboardSummaryDto> {
+    const papers = await this.paperRepository.findAllRaw(userId);
 
     const totalPapers = papers.length;
     const avgCitations =
@@ -76,8 +76,8 @@ export class AnalyticsService implements IAnalyticsService {
     return { totalPapers, avgCitations, fullyReadCount, completionRate, stageBreakdown };
   }
 
-  async getFunnelData(): Promise<FunnelResponseDto> {
-    const papers = await this.paperRepository.findAllRaw();
+  async getFunnelData(userId: string): Promise<FunnelResponseDto> {
+    const papers = await this.paperRepository.findAllRaw(userId);
 
     return STAGE_ORDER.map((stage): FunnelDataPointDto => {
       const stageIndex = STAGE_ORDER.indexOf(stage);
@@ -90,8 +90,8 @@ export class AnalyticsService implements IAnalyticsService {
     });
   }
 
-  async getDomainStages(): Promise<DomainStagesResponseDto> {
-    const papers = await this.paperRepository.findAllRaw();
+  async getDomainStages(userId: string): Promise<DomainStagesResponseDto> {
+    const papers = await this.paperRepository.findAllRaw(userId);
 
     const domains = Array.from(new Set(papers.map((p) => p.domain)));
 
@@ -113,8 +113,8 @@ export class AnalyticsService implements IAnalyticsService {
     });
   }
 
-  async getCitationsImpact(): Promise<CitationsImpactResponseDto> {
-    const papers = await this.paperRepository.findAllRaw();
+  async getCitationsImpact(userId: string): Promise<CitationsImpactResponseDto> {
+    const papers = await this.paperRepository.findAllRaw(userId);
 
     return papers.map((p: ResearchPaper): CitationsImpactDataPointDto => ({
       id: p.id,
@@ -126,8 +126,8 @@ export class AnalyticsService implements IAnalyticsService {
     }));
   }
 
-  async getRecentPapers(limit = DEFAULT_RECENT_LIMIT): Promise<RecentPapersResponseDto> {
-    const papers = await this.paperRepository.findAllRaw();
+  async getRecentPapers(userId: string, limit = DEFAULT_RECENT_LIMIT): Promise<RecentPapersResponseDto> {
+    const papers = await this.paperRepository.findAllRaw(userId);
 
     return papers
       .slice() // avoid mutating the store's array

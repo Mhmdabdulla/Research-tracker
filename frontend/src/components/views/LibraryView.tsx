@@ -19,6 +19,8 @@ import {
   useDeletePaperMutation,
   useUpdatePaperMutation,
 } from "../../services/apiSlice";
+import { useConfirm } from "../../hooks/useConfirm";
+import { toast } from "sonner";
 import type { ListPapersParams } from "../../types/api.types";
 
 /* ──────────── constants ──────────── */
@@ -134,11 +136,24 @@ export function LibraryView() {
 
   // ── Handlers ──────────────────────────────────────────────────────────────
 
+  const { confirm } = useConfirm();
+
   const handleDeletePaper = async (id: string) => {
+    const isConfirmed = await confirm({
+      title: "Delete Paper",
+      message: "Are you sure you want to delete this research paper? This action cannot be undone.",
+      confirmText: "Delete",
+      type: "danger",
+    });
+
+    if (!isConfirmed) return;
+
     try {
       await deletePaper(id).unwrap();
+      toast.success("Paper deleted successfully");
       setActiveRowMenu(null);
     } catch (err) {
+      toast.error("Failed to delete paper");
       console.error("Failed to delete paper:", err);
     }
   };
@@ -146,8 +161,10 @@ export function LibraryView() {
   const handleUpdateStage = async (id: string, newStage: PaperStage) => {
     try {
       await updatePaper({ id, body: { stage: newStage } }).unwrap();
+      toast.success(`Stage updated to ${newStage}`);
       setActiveRowMenu(null);
     } catch (err) {
+      toast.error("Failed to update stage");
       console.error("Failed to update stage:", err);
     }
   };

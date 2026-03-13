@@ -4,11 +4,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "../services/apiSlice";
 import authReducer from "./authSlice";
+import modalReducer from "./modalSlice";
 
 export const store = configureStore({
   reducer: {
     // Auth slice — stores token (from localStorage) + current user object
     auth: authReducer,
+
+    // Modal slice — manages confirmation modal state
+    modal: modalReducer,
 
     // RTK Query cache — handles all API requests and tag-based invalidation
     [apiSlice.reducerPath]: apiSlice.reducer,

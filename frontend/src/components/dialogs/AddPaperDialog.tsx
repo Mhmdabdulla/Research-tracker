@@ -26,6 +26,7 @@ import {
 import { PlusCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useAddPaperMutation } from "@/services/apiSlice";
 import type { ResearchDomain, PaperStage, ImpactScore } from "@/types/api.types";
+import { toast } from "sonner";
 
 // ─── Zod schema ───────────────────────────────────────────────────────────────
 
@@ -119,6 +120,7 @@ export function AddPaperDialog() {
             }).unwrap();
 
             // Success — reset everything and close
+            toast.success("Paper Created successfully.");
             resetForm();
             resetMutation();
             setOpen(false);

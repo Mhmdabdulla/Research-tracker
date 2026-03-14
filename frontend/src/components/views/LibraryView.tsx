@@ -15,10 +15,20 @@ import {
 } from "lucide-react";
 import { AddPaperDialog } from "@/components/dialogs/AddPaperDialog";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   useGetPapersQuery,
   useDeletePaperMutation,
   useUpdatePaperMutation,
 } from "../../services/apiSlice";
+import { useConfirm } from "../../hooks/useConfirm";
+import { toast } from "sonner";
 import type { ListPapersParams } from "../../types/api.types";
 
 /* ──────────── constants ──────────── */
@@ -80,7 +90,6 @@ export function LibraryView() {
   // setTimePeriod calls, etc.) instead of in a useEffect. This avoids the "cascading
   // renders" ESLint warning — setState in an effect body triggers an extra render cycle.
   const [currentPage,     setCurrentPage]     = useState(1);
-  const [activeRowMenu,   setActiveRowMenu]   = useState<string | null>(null);
 
   const timeRef   = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
@@ -134,11 +143,23 @@ export function LibraryView() {
 
   // ── Handlers ──────────────────────────────────────────────────────────────
 
+  const { confirm } = useConfirm();
+
   const handleDeletePaper = async (id: string) => {
+    const isConfirmed = await confirm({
+      title: "Delete Paper",
+      message: "Are you sure you want to delete this research paper? This action cannot be undone.",
+      confirmText: "Delete",
+      type: "danger",
+    });
+
+    if (!isConfirmed) return;
+
     try {
       await deletePaper(id).unwrap();
-      setActiveRowMenu(null);
+      toast.success("Paper deleted successfully");
     } catch (err) {
+      toast.error("Failed to delete paper");
       console.error("Failed to delete paper:", err);
     }
   };
@@ -146,8 +167,9 @@ export function LibraryView() {
   const handleUpdateStage = async (id: string, newStage: PaperStage) => {
     try {
       await updatePaper({ id, body: { stage: newStage } }).unwrap();
-      setActiveRowMenu(null);
+      toast.success(`Stage updated to ${newStage}`);
     } catch (err) {
+      toast.error("Failed to update stage");
       console.error("Failed to update stage:", err);
     }
   };
@@ -393,54 +415,47 @@ export function LibraryView() {
                     {new Date(paper.dateAdded).toLocaleDateString(undefined, { month: "numeric", day: "numeric", year: "numeric" })}
                   </TableCell>
 
-                  {/* Row actions — menu ref closes it on outside click without racing the toggle button */}
-                  <TableCell className="relative">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setActiveRowMenu(activeRowMenu === paper.id ? null : paper.id); }}
-                      className="p-1 rounded hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-                    >
-                      <MoreHorizontal className="w-4 h-4" />
-                    </button>
-
-                    {activeRowMenu === paper.id && (
-                      <>
-                        {/* Invisible backdrop — clicking anywhere outside closes the menu */}
-                        <div
-                          className="fixed inset-0 z-40"
-                          onClick={() => setActiveRowMenu(null)}
-                        />
-                        <div className="absolute right-0 top-full mt-1 w-52 bg-popover border rounded-lg shadow-xl z-50 py-1" onClick={(e) => e.stopPropagation()}>
-                          <div className="px-4 py-2 text-sm font-medium flex items-center gap-2 border-b">
-                            <Pencil className="w-3.5 h-3.5" /> Update Stage
-                          </div>
-                          <div className="py-1">
-                            {ALL_STAGES.map(s => (
-                              <button key={s}
-                                disabled={isUpdating}
-                                onClick={() => handleUpdateStage(paper.id, s)}
-                                className={`w-full text-left px-6 py-1.5 text-sm transition-colors disabled:opacity-50 ${paper.stage === s ? "text-primary bg-primary/10 font-medium" : "text-popover-foreground hover:bg-accent"}`}>
-                                {isUpdating && paper.stage === s
-                                  ? <Loader2 className="inline w-3 h-3 mr-2 animate-spin" />
-                                  : null}
-                                {s}
-                              </button>
-                            ))}
-                          </div>
-                          <div className="border-t py-1">
-                            <button
-                              disabled={isDeleting}
-                              onClick={() => handleDeletePaper(paper.id)}
-                              className="w-full text-left px-4 py-2 text-sm text-destructive hover:bg-destructive/10 flex items-center gap-2 transition-colors disabled:opacity-50"
-                            >
-                              {isDeleting
-                                ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                : <Trash2 className="w-3.5 h-3.5" />}
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-                      </>
-                    )}
+                  {/* Row actions — Using DropdownMenu for proper portal rendering to avoid clipping */}
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="p-1 rounded hover:bg-muted transition-colors text-muted-foreground hover:text-foreground outline-none">
+                          <MoreHorizontal className="w-4 h-4" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-52">
+                        <DropdownMenuLabel className="flex items-center gap-2">
+                          <Pencil className="w-3.5 h-3.5" /> Update Stage
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {ALL_STAGES.map(s => (
+                          <DropdownMenuItem
+                            key={s}
+                            disabled={isUpdating}
+                            onClick={() => handleUpdateStage(paper.id, s)}
+                            className={paper.stage === s ? "text-primary bg-primary/10 font-medium cursor-pointer" : "cursor-pointer pl-6"}
+                          >
+                            {isUpdating && paper.stage === s && (
+                              <Loader2 className="inline w-3 h-3 mr-2 animate-spin" />
+                            )}
+                            {s}
+                          </DropdownMenuItem>
+                        ))}
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          disabled={isDeleting}
+                          onClick={() => handleDeletePaper(paper.id)}
+                          className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer"
+                        >
+                          {isDeleting ? (
+                            <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
+                          ) : (
+                            <Trash2 className="w-3.5 h-3.5 mr-2" />
+                          )}
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))

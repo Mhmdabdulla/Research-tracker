@@ -16,6 +16,8 @@ import { useGetMeQuery, useUpdateProfileMutation } from "../../services/apiSlice
 import { setUser, clearCredentials, selectUser } from "../../store/authSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useNavigate } from "react-router-dom";
+import { useConfirm } from "../../hooks/useConfirm";
+import { toast } from "sonner";
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 
@@ -55,8 +57,6 @@ export function ProfilePage() {
   const navigate  = useNavigate();
   const storeUser = useAppSelector(selectUser);
 
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
-
   // Fetch the current user from the API (also keeps the user in sync)
   const { data: meResponse, isLoading: meLoading } = useGetMeQuery();
   const [updateProfile, { isLoading: updating, isError, error }] = useUpdateProfileMutation();
@@ -94,18 +94,28 @@ export function ProfilePage() {
     try {
       const response = await updateProfile(data).unwrap();
       dispatch(setUser(response.data));
-      setSuccessMsg("Profile updated successfully.");
+      toast.success("Profile updated successfully.");
       reset({ name: response.data.name, email: response.data.email });
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccessMsg(null), 3000);
     } catch {
       // isError handled declaratively
     }
   };
 
-  const handleLogout = () => {
+  const { confirm } = useConfirm();
+
+  const handleLogout = async () => {
+    const isConfirmed = await confirm({
+      title: "Sign Out",
+      message: "Are you sure you want to sign out of your account?",
+      confirmText: "Sign Out",
+      type: "info",
+    });
+
+    if (!isConfirmed) return;
+
     dispatch(clearCredentials());
     navigate("/login", { replace: true });
+    toast.success("Signed out successfully");
   };
 
   const getApiError = (): string => {
@@ -195,17 +205,7 @@ export function ProfilePage() {
             </CardHeader>
             <CardContent>
 
-              {/* Success banner */}
-              {successMsg && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-4 flex items-center gap-2.5 rounded-lg border border-emerald-200 bg-emerald-50 dark:border-emerald-800/50 dark:bg-emerald-950/30 px-3.5 py-3"
-                >
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <p className="text-sm text-emerald-600 dark:text-emerald-400">{successMsg}</p>
-                </motion.div>
-              )}
+              {/* Success banner removed in favor of toasts */}
 
               {/* Error banner */}
               {isError && (

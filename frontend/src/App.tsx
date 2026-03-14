@@ -11,6 +11,8 @@ import { ProtectedRoute, PublicRoute } from "./router/ProtectedRoute";
 
 // App initializer (rehydrates user on startup)
 import { AppInitializer } from "./components/layout/AppInitializer";
+import { ConfirmModal } from "./components/ui/ConfirmModal";
+import { Toaster } from "sonner";
 
 // Public pages
 import { LoginPage }  from "./components/auth/LoginPage";
@@ -80,6 +82,8 @@ export default function App() {
     // AppInitializer fires getMe on startup when a token is present,
     // restoring the user object in Redux without blocking the UI.
     <AppInitializer>
+      <Toaster position="top-right" expand={false} richColors />
+      <ConfirmModal />
       <Routes>
 
         {/* ── Public routes (redirect to /dashboard if already logged in) ── */}
